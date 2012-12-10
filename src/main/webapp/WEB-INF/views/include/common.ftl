@@ -9,11 +9,20 @@
 	            <div class="nav-collapse collapse">
 	                <ul class="nav">
 	                	<#list keys as key>
-		                    <li<#if key==activeItem > class="active"</#if>><a href="${menuItems[key]}">${key}</a></li>
+		                    <li<#if key_index==activeItem > class="active"</#if>><a href="${menuItems[key]}">${key}</a></li>
 	                    </#list>
 	                </ul>
 	            </div>
 	        </div>
 	    </div>
 	</div>
+</#macro>
+
+<#macro samplesBar barItems activeItem >
+	<#assign keys = barItems?keys>
+	<ul class="nav nav-pills nav-stacked">
+    	<#list keys as key>
+            <li<#if key_index==activeItem > class="active"</#if>><a href="${barItems[key]}">${key}</a></li>
+        </#list>
+	</ul>
 </#macro>

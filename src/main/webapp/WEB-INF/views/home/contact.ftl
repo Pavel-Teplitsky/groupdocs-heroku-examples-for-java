@@ -2,7 +2,7 @@
 <#include "../include/header.ftl"/>
 
 		<#assign menuItems = { "Home" : "/", "Contact" : "/contact", "About" : "/about" } />
-		<@navBar menuItems=menuItems activeItem=0 brandTitle="GroupDocs" brandUrl="http://www.groupdocs.com" />  
+		<@navBar menuItems=menuItems activeItem=1 brandTitle="GroupDocs" brandUrl="http://www.groupdocs.com" />  
 
         <div class="container">
 
@@ -10,7 +10,7 @@
 	            <h2>GroupDocs Java SDK Samples for <a href="http://www.heroku.com/" target="_blank">heroku</a> add-on.</h2>
 
 				<#assign sampleItems = {
-					"Home Page" : "/", 
+					"Contact Page" : "/contact", 
 					"1 - How to login to GroupDocs using the API" : "/sample1", 
 					"2 - How to list files within GroupDocs Storage using the Storage API" : "/sample2", 
 					"3 - How to upload a file to GroupDocs using the Storage API" : "/sample3", 
@@ -22,6 +22,9 @@
 					"9 - How to generate an embedded Viewer URL for a Document" : "/sample9", 
 					"10 - How to share a document to other users" : "/sample10"} />
 				<@samplesBar barItems=sampleItems activeItem=0 />
+                <p>
+                	Contact Page
+                </p>
 				  
             </div>
 

@@ -4,7 +4,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.groupdocs.api</groupId>
 	<artifactId>groupdocs-heroku-examples-for-java</artifactId>
-	<packaging>war</packaging>
 	<version>1.0</version>
 	<name>GroupDocs heroku examples for Java</name>
 	<url>http://maven.apache.org</url>

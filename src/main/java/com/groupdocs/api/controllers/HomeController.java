@@ -17,4 +17,18 @@ public class HomeController extends AbstractController {
         log.info("/index.htm ");
         return "home/index";
     }
+
+    @RequestMapping("/contact")
+    public String contact() {
+
+        log.info("/contact ");
+        return "home/contact";
+    }
+
+    @RequestMapping("/about")
+    public String about() {
+
+        log.info("/about ");
+        return "home/about";
+    }
 }

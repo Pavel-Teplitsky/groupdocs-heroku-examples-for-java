@@ -21,7 +21,11 @@
 					"8 - How to return a URL representing a single page of a Document" : "/sample8", 
 					"9 - How to generate an embedded Viewer URL for a Document" : "/sample9", 
 					"10 - How to share a document to other users" : "/sample10"} />
-				<@samplesBar barItems=sampleItems activeItem=0 />
+				<@samplesBar barItems=sampleItems activeItem=8 />
+				
+                <p>
+                	Content
+                </p>
 				  
             </div>
 
