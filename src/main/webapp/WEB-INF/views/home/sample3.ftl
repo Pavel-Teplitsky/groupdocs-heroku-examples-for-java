@@ -14,7 +14,7 @@
 					"1 - How to login to GroupDocs using the API" : "/sample1", 
 					"2 - How to list files within GroupDocs Storage using the Storage API" : "/sample2", 
 					"3 - How to upload a file to GroupDocs using the Storage API" : "/sample3", 
-					"4 - How to upload a file to GroupDocs using the Storage API" : "/sample4", 
+					"4 - How to download a file from GroupDocs Storage using the Storage API" : "/sample4", 
 					"5 - How to copy / move a file using the GroupDocs Storage API" : "/sample5", 
 					"6 - How to add a Signature to a document in GroupDocs Signature" : "/sample6", 
 					"7 - How to create a list of thumbnails for a document" : "/sample7", 
@@ -33,18 +33,20 @@
 						</p>
 					</#if>
 					<form action="/sample3" method="POST" enctype="multipart/form-data">
-						<input type="file" name="fileName" />
+						<input type="file" name="fileData" />
 						
 						<input type="submit" value="Submit" class="btn" />
 					</form>
-					<ul class="nav nav-tabs nav-stacked">
-						<li><a>
-							File Name: 111
-						</a></li>
-						<li><a>
-							File Guid: 222
-						</a></li>
-					</ul>
+					<#if file?? >
+						<ul class="nav nav-tabs nav-stacked">
+							<li><a>
+								<span class="label">File Name:</span> ${file.adj_name}
+							</a></li>
+							<li><a>
+								<span class="label">File Guid:</span> ${file.guid}
+							</a></li>
+						</ul>
+					</#if>
                 </p>
 				  
             </div>

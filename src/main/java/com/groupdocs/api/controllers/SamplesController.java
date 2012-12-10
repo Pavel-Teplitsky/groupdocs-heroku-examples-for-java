@@ -1,18 +1,29 @@
 package com.groupdocs.api.controllers;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.groupdocs.api.forms.Sample3Form;
 import com.groupdocs.sdk.api.MgmtApi;
 import com.groupdocs.sdk.api.StorageApi;
 import com.groupdocs.sdk.common.ApiException;
 import com.groupdocs.sdk.common.ApiInvoker;
+import com.groupdocs.sdk.common.FileStream;
 import com.groupdocs.sdk.common.GroupDocsRequestSigner;
 import com.groupdocs.sdk.model.FileSystemDocument;
 import com.groupdocs.sdk.model.ListEntitiesResponse;
+import com.groupdocs.sdk.model.UploadRequestResult;
+import com.groupdocs.sdk.model.UploadResponse;
 import com.groupdocs.sdk.model.UserInfo;
 import com.groupdocs.sdk.model.UserInfoResponse;
 
@@ -86,8 +97,14 @@ public class SamplesController extends AbstractController {
         return modelAndView;
     }
 
-    @RequestMapping("/sample3")
-    public ModelAndView sample3() {
+    @RequestMapping(value = "/sample3", method = RequestMethod.GET)
+    public String sample3(Model model) {
+        model.addAttribute(new Sample3Form());
+        return "home/sample3";
+    }
+
+    @RequestMapping(value = "/sample3", method = RequestMethod.POST)
+    public ModelAndView sample3(Sample3Form sample3Form, BindingResult result) {
         ModelAndView modelAndView = new ModelAndView("home/sample3");
         // Specify GroupDocs URL
         @SuppressWarnings("unused")
@@ -96,6 +113,40 @@ public class SamplesController extends AbstractController {
         String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
         String privateKey = System.getenv("GROUPDOCS_TEST_APPSID");
 
+        if (result.hasErrors())
+        {
+          for(ObjectError error : result.getAllErrors())
+          {
+              log.error("Error: " + error.getCode() +  " - " + error.getDefaultMessage());
+              modelAndView.addObject("errmsg", error.getDefaultMessage());
+          }
+        }
+        else {
+            CommonsMultipartFile multipartFile = sample3Form.getFileData();
+            UploadRequestResult file = null;
+            try {
+                ApiInvoker.getInstance().setRequestSigner(
+                        new GroupDocsRequestSigner(privateKey));
+                StorageApi api = new StorageApi();
+                UploadResponse response = api.Upload(clientId, multipartFile.getOriginalFilename(), null, new FileStream(multipartFile.getInputStream()));
+                if(response != null && response.getStatus().trim().equalsIgnoreCase("Ok")){
+                    file = response.getResult();
+                }
+                else {
+                    throw new ApiException(0, response.getError_message());
+                }
+                modelAndView.addObject("file", file);
+            } catch (ApiException e) {
+                if(e.getCode() == 401){
+                    modelAndView.addObject("errmsg", "Wrong Credentials. Please make sure to use credentials from Production Server");
+                } else {
+                    modelAndView.addObject("errmsg", "Failed to access API: " + e.getMessage());
+                }
+            }
+            catch (IOException e) {
+                modelAndView.addObject("errmsg", "Failed to access API: " + e.getMessage());
+            }
+        }
         log.info("/sample3.htm ");
         return modelAndView;
     }
