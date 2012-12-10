@@ -31,29 +31,32 @@
 						<p>
 							<span class="label label-important">${errmsg}</span>
 						</p>
+					<#elseif files?? >
+						<ul class="nav nav-tabs nav-stacked">
+							<li><a>
+								<ul class="thumbnails">
+									<li class="span5">
+										<span class="label">File Name</span>
+									</li>
+									<li class="span5">
+										<span class="label">File Guid</span>
+									</li>
+								</ul>
+							</a></li>
+							<#list files as file >
+								<li><a>
+									<ul class="thumbnails">
+										<li class="span5">
+											${file.name}
+										</li>
+										<li class="span5">
+											${file.guid}
+										</li>
+									</ul>
+								</a></li>
+							</#list>
+						</ul>
 					</#if>
-					<ul class="nav nav-tabs nav-stacked">
-						<li><a>
-							<ul class="thumbnails">
-								<li class="span5">
-									File Name: 111
-								</li>
-								<li class="span5">
-									File Guid: 222
-								</li>
-							</ul>
-						</a></li>
-						<li><a>
-							<ul class="thumbnails">
-								<li class="span5">
-									File Name: 111
-								</li>
-								<li class="span5">
-									File Guid: 222
-								</li>
-							</ul>
-						</a></li>
-					</ul>
                 </p>
 				  
             </div>

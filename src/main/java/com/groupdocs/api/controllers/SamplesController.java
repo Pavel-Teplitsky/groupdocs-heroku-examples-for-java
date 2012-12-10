@@ -1,13 +1,18 @@
 package com.groupdocs.api.controllers;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.groupdocs.sdk.api.MgmtApi;
+import com.groupdocs.sdk.api.StorageApi;
 import com.groupdocs.sdk.common.ApiException;
 import com.groupdocs.sdk.common.ApiInvoker;
 import com.groupdocs.sdk.common.GroupDocsRequestSigner;
+import com.groupdocs.sdk.model.FileSystemDocument;
+import com.groupdocs.sdk.model.ListEntitiesResponse;
 import com.groupdocs.sdk.model.UserInfo;
 import com.groupdocs.sdk.model.UserInfoResponse;
 
@@ -21,14 +26,14 @@ public class SamplesController extends AbstractController {
         @SuppressWarnings("unused")
         String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
         // Specify App Key and App SID
-        String appKey = System.getenv("GROUPDOCS_TEST_APPKEY");
-        String appSid = System.getenv("GROUPDOCS_TEST_APPSID");
+        String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
+        String privateKey = System.getenv("GROUPDOCS_TEST_APPSID");
         UserInfo userInfo = null;
         ApiInvoker.getInstance().setRequestSigner(
-                new GroupDocsRequestSigner(appSid));
+                new GroupDocsRequestSigner(privateKey));
         MgmtApi api = new MgmtApi();
         try {
-            UserInfoResponse response = api.GetUserProfile(appKey);
+            UserInfoResponse response = api.GetUserProfile(clientId);
             if(response != null && response.getStatus().trim().equalsIgnoreCase("Ok")){
                 userInfo = response.getResult().getUser();
             }
@@ -39,7 +44,7 @@ public class SamplesController extends AbstractController {
         } catch (ApiException e) {
             log.error(e.getMessage());
             if(e.getCode() == 401){
-                modelAndView.addObject("errmsg", "Wrong Credentials. Please make sure to use credentials from");
+                modelAndView.addObject("errmsg", "Wrong Credentials. Please make sure to use credentials from Production Server");
             } else {
                 modelAndView.addObject("errmsg", "Failed to access API: " + e.getMessage());
             }
@@ -54,8 +59,28 @@ public class SamplesController extends AbstractController {
         @SuppressWarnings("unused")
         String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
         // Specify App Key and App SID
-        String appKey = System.getenv("GROUPDOCS_TEST_APPKEY");
-        String appSid = System.getenv("GROUPDOCS_TEST_APPSID");
+        String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
+        String privateKey = System.getenv("GROUPDOCS_TEST_APPSID");
+        List<FileSystemDocument> files = null;
+        try {
+            ApiInvoker.getInstance().setRequestSigner(
+                    new GroupDocsRequestSigner(privateKey));
+            StorageApi api = new StorageApi();
+            ListEntitiesResponse response = api.ListEntities(clientId, "", null, null, null, null, null, null, null);
+            if(response != null && response.getStatus().trim().equalsIgnoreCase("Ok")){
+                files = response.getResult().getFiles();
+            }
+            else {
+                throw new ApiException(0, response.getError_message());
+            }
+            modelAndView.addObject("files", files);
+        } catch (ApiException e) {
+            if(e.getCode() == 401){
+                modelAndView.addObject("errmsg", "Wrong Credentials. Please make sure to use credentials from Production Server");
+            } else {
+                modelAndView.addObject("errmsg", "Failed to access API: " + e.getMessage());
+            }
+        }
 
         log.info("/sample2.htm ");
         return modelAndView;
@@ -68,8 +93,8 @@ public class SamplesController extends AbstractController {
         @SuppressWarnings("unused")
         String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
         // Specify App Key and App SID
-        String appKey = System.getenv("GROUPDOCS_TEST_APPKEY");
-        String appSid = System.getenv("GROUPDOCS_TEST_APPSID");
+        String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
+        String privateKey = System.getenv("GROUPDOCS_TEST_APPSID");
 
         log.info("/sample3.htm ");
         return modelAndView;
@@ -82,8 +107,8 @@ public class SamplesController extends AbstractController {
         @SuppressWarnings("unused")
         String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
         // Specify App Key and App SID
-        String appKey = System.getenv("GROUPDOCS_TEST_APPKEY");
-        String appSid = System.getenv("GROUPDOCS_TEST_APPSID");
+        String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
+        String privateKey = System.getenv("GROUPDOCS_TEST_APPSID");
 
         log.info("/sample4.htm ");
         return modelAndView;
@@ -96,8 +121,8 @@ public class SamplesController extends AbstractController {
         @SuppressWarnings("unused")
         String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
         // Specify App Key and App SID
-        String appKey = System.getenv("GROUPDOCS_TEST_APPKEY");
-        String appSid = System.getenv("GROUPDOCS_TEST_APPSID");
+        String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
+        String privateKey = System.getenv("GROUPDOCS_TEST_APPSID");
 
         log.info("/sample5.htm ");
         return modelAndView;
@@ -110,8 +135,8 @@ public class SamplesController extends AbstractController {
         @SuppressWarnings("unused")
         String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
         // Specify App Key and App SID
-        String appKey = System.getenv("GROUPDOCS_TEST_APPKEY");
-        String appSid = System.getenv("GROUPDOCS_TEST_APPSID");
+        String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
+        String privateKey = System.getenv("GROUPDOCS_TEST_APPSID");
 
         log.info("/sample6.htm ");
         return modelAndView;
@@ -124,8 +149,8 @@ public class SamplesController extends AbstractController {
         @SuppressWarnings("unused")
         String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
         // Specify App Key and App SID
-        String appKey = System.getenv("GROUPDOCS_TEST_APPKEY");
-        String appSid = System.getenv("GROUPDOCS_TEST_APPSID");
+        String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
+        String privateKey = System.getenv("GROUPDOCS_TEST_APPSID");
 
         log.info("/sample7.htm ");
         return modelAndView;
@@ -138,8 +163,8 @@ public class SamplesController extends AbstractController {
         @SuppressWarnings("unused")
         String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
         // Specify App Key and App SID
-        String appKey = System.getenv("GROUPDOCS_TEST_APPKEY");
-        String appSid = System.getenv("GROUPDOCS_TEST_APPSID");
+        String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
+        String privateKey = System.getenv("GROUPDOCS_TEST_APPSID");
 
         log.info("/sample8.htm ");
         return modelAndView;
@@ -152,8 +177,8 @@ public class SamplesController extends AbstractController {
         @SuppressWarnings("unused")
         String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
         // Specify App Key and App SID
-        String appKey = System.getenv("GROUPDOCS_TEST_APPKEY");
-        String appSid = System.getenv("GROUPDOCS_TEST_APPSID");
+        String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
+        String privateKey = System.getenv("GROUPDOCS_TEST_APPSID");
 
         log.info("/sample9.htm ");
         return modelAndView;
@@ -166,8 +191,8 @@ public class SamplesController extends AbstractController {
         @SuppressWarnings("unused")
         String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
         // Specify App Key and App SID
-        String appKey = System.getenv("GROUPDOCS_TEST_APPKEY");
-        String appSid = System.getenv("GROUPDOCS_TEST_APPSID");
+        String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
+        String privateKey = System.getenv("GROUPDOCS_TEST_APPSID");
 
         log.info("/sample10.htm ");
         return modelAndView;
