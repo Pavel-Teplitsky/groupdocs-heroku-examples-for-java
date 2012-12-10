@@ -24,7 +24,27 @@
 				<@samplesBar barItems=sampleItems activeItem=3 />
 				
                 <p>
-                	Content
+					<p>
+						<div class="alert alert-info">This sample will show how to use StorageApi to upload test file to GroupDocs account using Java SDK</div>
+					</p>
+					<#if errmsg?? >
+						<p>
+							<span class="label label-important">${errmsg}</span>
+						</p>
+					</#if>
+					<form action="/sample3" method="POST" enctype="multipart/form-data">
+						<input type="file" name="fileName" />
+						
+						<input type="submit" value="Submit" class="btn" />
+					</form>
+					<ul class="nav nav-tabs nav-stacked">
+						<li><a>
+							File Name: 111
+						</a></li>
+						<li><a>
+							File Guid: 222
+						</a></li>
+					</ul>
                 </p>
 				  
             </div>

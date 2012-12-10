@@ -24,9 +24,78 @@
 				<@samplesBar barItems=sampleItems activeItem=5 />
 				
                 <p>
-                	Content
+					<p>
+						<div class="alert alert-info">This sample will show how to Copy/Move particular file in your GroupDocs account using Java SDK</div>
+					</p>
+					<#if errmsg?? >
+						<p>
+							<span class="label label-important">${errmsg}</span>
+						</p>
+					</#if>
+					<form action="/sample5" method="POST" enctype="multipart/form-data">
+						<div class="input-append">
+							<label for="fileId">File ID</label>
+							<input type="text" name="fileId" id="fileId" /><br />
+
+							<label for="folderNameId">Folder in which you want to copy/move file </label>
+							<input type="text" name="folderName" id="folderNameId" /><br />
+							
+							<input type="submit" value="Submit" class="btn" />
+						</div>
+					</form>
+					<ul class="nav nav-tabs nav-stacked">
+						<li><a>
+							<ul class="thumbnails">
+								<li class="span5">
+									Source File
+								</li>
+								<li class="span5">
+									Destination File
+								</li>
+							</ul>
+						</a></li>
+						<li><a>
+							<ul class="thumbnails">
+								<li class="span5">
+									Name: 123
+								</li>
+								<li class="span5">
+									Name: 123
+								</li>
+							</ul>
+						</a></li>
+						<li><a>
+							<ul class="thumbnails">
+								<li class="span5">
+									Path: 234
+								</li>
+								<li class="span5">
+									Path: 234
+								</li>
+							</ul>
+						</a></li>
+						<li><a>
+							<ul class="thumbnails">
+								<li class="span5">
+									GUID: 345
+								</li>
+								<li class="span5">
+									GUID: 345
+								</li>
+							</ul>
+						</a></li>
+						<li><a>
+							<ul class="thumbnails">
+								<li class="span5">
+									ID: 456
+								</li>
+								<li class="span5">
+									ID: 456
+								</li>
+							</ul>
+						</a></li>
+					</ul>
                 </p>
-				  
             </div>
 
             <hr />

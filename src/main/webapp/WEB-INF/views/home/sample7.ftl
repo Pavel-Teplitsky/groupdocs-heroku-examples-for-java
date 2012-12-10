@@ -24,7 +24,22 @@
 				<@samplesBar barItems=sampleItems activeItem=7 />
 				
                 <p>
-                	Content
+					<p>
+						<div class="alert alert-info">This sample will show how to list thumbnails for documents in the GroupDocs account using Java SDK</div>
+					</p>
+					<#if errmsg?? >
+						<p>
+							<span class="label label-important">${errmsg}</span>
+						</p>
+					</#if>
+					<ul class="nav nav-tabs nav-stacked">
+						<li><a>
+							File Name: 111
+						</a></li>
+						<li><a>
+							File Guid: 222
+						</a></li>
+					</ul>
                 </p>
 				  
             </div>

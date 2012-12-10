@@ -24,7 +24,36 @@
 				<@samplesBar barItems=sampleItems activeItem=2 />
 				
                 <p>
-                	Content
+					<p>
+						<div class="alert alert-info">This sample will show how to use StorageApi to list all user files from GroupDocs account using Java SDK</div>
+					</p>
+					<#if errmsg?? >
+						<p>
+							<span class="label label-important">${errmsg}</span>
+						</p>
+					</#if>
+					<ul class="nav nav-tabs nav-stacked">
+						<li><a>
+							<ul class="thumbnails">
+								<li class="span5">
+									File Name: 111
+								</li>
+								<li class="span5">
+									File Guid: 222
+								</li>
+							</ul>
+						</a></li>
+						<li><a>
+							<ul class="thumbnails">
+								<li class="span5">
+									File Name: 111
+								</li>
+								<li class="span5">
+									File Guid: 222
+								</li>
+							</ul>
+						</a></li>
+					</ul>
                 </p>
 				  
             </div>

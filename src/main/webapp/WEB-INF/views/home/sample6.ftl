@@ -24,7 +24,30 @@
 				<@samplesBar barItems=sampleItems activeItem=6 />
 				
                 <p>
-                	Content
+					<p>
+						<div class="alert alert-info">This sample will show how to add provided signature to provided document using Java SDK.
+						Signed file will be uploaded to GroupDocs account and its GUID will be returned and embed into webpage with GroupDocs Ebedded Viewer. </div>
+					</p>
+					<#if errmsg?? >
+						<p>
+							<span class="label label-important">${errmsg}</span>
+						</p>
+					</#if>
+					<form action="/sample6" method="POST" enctype="multipart/form-data">
+						<div class="input-append">
+							<label for="documentId">Document to sign</label>
+							<input type="file" name="document" id="documentId" /><br />
+							<br />
+							<label for="signatureId">Signature</label>
+							<input type="file" name="signature" id="signatureId" /><br />
+							<br />
+							<input type="submit" value="Submit" class="btn" />
+						</div>
+					</form>
+
+					<p>
+						<iframe src="https://apps.groupdocs.com/document-viewer/embed/@fileGuid" frameborder="0" width="100%" height="1000px" />
+					</p>
                 </p>
 				  
             </div>

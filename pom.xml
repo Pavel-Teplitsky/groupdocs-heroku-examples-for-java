@@ -85,6 +85,11 @@
 			<version>3.8.0.GA</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.groupdocs</groupId>
+			<artifactId>groupdocs-java-client</artifactId>
+			<version>1.2</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>groupdocs-heroku-examples-for-java</finalName>

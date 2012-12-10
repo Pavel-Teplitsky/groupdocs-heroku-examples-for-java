@@ -24,7 +24,33 @@
 				<@samplesBar barItems=sampleItems activeItem=8 />
 				
                 <p>
-                	Content
+					<p>
+						<div class="alert alert-info">This sample will show how to return a URL representing a single page of particular Document in the GroupDocs account using Java SDK</div>
+					</p>
+					<#if errmsg?? >
+						<p>
+							<span class="label label-important">${errmsg}</span>
+						</p>
+					</#if>
+					<form action="/sample8" method="POST" enctype="multipart/form-data">
+						<div class="input-append">
+							<label for="fileId">File ID</label>
+							<input type="text" name="fileId" id="fileId" /><br />
+							
+							<label for="pageNumberId">Page number</label>
+							<input type="text" name="pageNumber" id="pageNumberId" /><br />
+							
+							<input type="submit" value="Submit" class="btn" />
+						</div>
+					</form>
+					<ul class="nav nav-tabs nav-stacked">
+						<li><a>
+							File Name: 111
+						</a></li>
+						<li><a>
+							File Guid: 222
+						</a></li>
+					</ul>
                 </p>
 				  
             </div>

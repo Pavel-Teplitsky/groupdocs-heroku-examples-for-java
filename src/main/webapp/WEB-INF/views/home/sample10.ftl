@@ -24,7 +24,33 @@
 				<@samplesBar barItems=sampleItems activeItem=10 />
 				
                 <p>
-                	Content
+					<p>
+						<div class="alert alert-info">This sample will show how to share particular document from your GroupDocs account to other GroupDocs users using Java SDK</div>
+					</p>
+					<#if errmsg?? >
+						<p>
+							<span class="label label-important">${errmsg}</span>
+						</p>
+					</#if>
+					<form action="/sample10" method="POST" enctype="multipart/form-data">
+						<div class="input-append">
+							<label for="fileId">File ID</label>
+							<input type="text" name="fileId" id="fileId" /><br />
+							
+							<label for="emailId">Email</label>
+							<input type="text" name="email" id="emailId" /><br />
+							
+							<input type="submit" value="Submit" class="btn" />
+						</div>
+					</form>
+					<ul class="nav nav-tabs nav-stacked">
+						<li><a>
+							File Name: 111
+						</a></li>
+						<li><a>
+							File Guid: 222
+						</a></li>
+					</ul>
                 </p>
 				  
             </div>

@@ -24,9 +24,21 @@
 				<@samplesBar barItems=sampleItems activeItem=1 />
 
                 <p>
-                	Content
+					<p>
+						<div class="alert alert-info">This sample will show how to use Signer object to be authorized at GroupDocs and how to get GroupDocs user infromation using Java SDK</div>
+					</p>
+					<#if errmsg?? >
+						<p>
+							<span class="label label-important">${errmsg}</span>
+						</p>
+					</#if>
+					<ul class="nav nav-tabs nav-stacked">
+						<li><a>First Name</a></a></li>
+						<li><a>Last Name</a></li>
+						<li><a>Nick Name</a></li>
+						<li><a>Primary Email</a></li>
+					</ul>
                 </p>
-				  
             </div>
 
             <hr />

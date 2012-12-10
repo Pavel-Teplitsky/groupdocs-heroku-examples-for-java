@@ -24,7 +24,30 @@
 				<@samplesBar barItems=sampleItems activeItem=4 />
 				
                 <p>
-                	Content
+					<p>
+						<div class="alert alert-info">This sample will show how to download particular file from GroupDocs account using Java SDK</div>
+					</p>
+					<#if errmsg?? >
+						<p>
+							<span class="label label-important">${errmsg}</span>
+						</p>
+					</#if>
+					<form action="/sample4" method="POST" enctype="multipart/form-data">
+						<div class="input-append">
+							<label for="fileId">File ID</label>
+							<input type="text" name="fileId" id="fileId" /><br />
+							
+							<input type="submit" value="Submit" class="btn" />
+						</div>
+					</form>
+					<ul class="nav nav-tabs nav-stacked">
+						<li><a>
+							File Name: 111
+						</a></li>
+						<li><a>
+							File Guid: 222
+						</a></li>
+					</ul>
                 </p>
 				  
             </div>

@@ -24,7 +24,49 @@
 				<@samplesBar barItems=sampleItems activeItem=9 />
 				
                 <p>
-                	Content
+					<p>
+						<div class="alert alert-info">This sample will show how to generate an embedded Viewer URL for particular Document in the GroupDocs account using Java SDK</div>
+					</p>
+					<#if errmsg?? >
+						<p>
+							<span class="label label-important">${errmsg}</span>
+						</p>
+					</#if>
+					<form action="/sample9" method="POST" enctype="multipart/form-data">
+						<div class="input-append">
+							<label for="fileId">File ID</label>
+							<input type="text" name="fileId" id="fileId" /><br />
+							
+							<label for="widthId">Width</label>
+							<input type="text" name="width" id="widthId" /><br />
+							
+							<label for="heightId">Height</label>
+							<input type="text" name="height" id="heightId" /><br />
+							
+							<input type="submit" value="Submit" class="btn" />
+						</div>
+					</form>
+					<ul class="nav nav-tabs nav-stacked">
+						<li><a>
+							<ul class="thumbnails">
+								<li class="span5">
+									Key
+								</li>
+								<li class="span5">
+									Value
+								</li>
+							</ul>
+							<ul class="thumbnails">
+								<li class="span5">
+									111
+								</li>
+								<li class="span5">
+									222
+								</li>
+							</ul>
+						</a></li>
+					</ul>
+					<iframe src="https://apps.groupdocs.com/document-viewer/embed/@data.get("guid")" frameborder="0" width="@data.get("width")" height="@data.get("height")" />
                 </p>
 				  
             </div>
