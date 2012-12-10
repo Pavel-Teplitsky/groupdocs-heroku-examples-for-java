@@ -1,9 +1,9 @@
-GroupDocs Java SDK Samples for [http://www.heroku.com/](heroku) add-on.
+GroupDocs Java SDK Samples for [heroku](http://www.heroku.com/) add-on.
 ======================
 
 This sample was developed using Spring Framework.
 
-To see online demo of this project please go to [http://groupdocs-java-samples.herokuapp.com/](http://groupdocs-java-samples.herokuapp.com/)
+To see online demo of this project please go to [http://groupdocs-heroku-examples-for-java.herokuapp.com/](http://groupdocs-heroku-examples-for-java.herokuapp.com/)
 
 To deploy project locally follow this instructions:
 

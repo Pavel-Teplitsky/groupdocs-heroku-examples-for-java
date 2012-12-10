@@ -31,13 +31,14 @@
 						<p>
 							<span class="label label-important">${errmsg}</span>
 						</p>
+					<#elseif userInfo?? >
+						<ul class="nav nav-tabs nav-stacked">
+							<li><a>First Name: <span class="label">${userInfo.firstname}</span></a></a></li>
+							<li><a>Last Name: <span class="label">${userInfo.lastname}</span></a></li>
+							<li><a>Nick Name: <span class="label">${userInfo.nickname}</span></a></li>
+							<li><a>Primary Email: <span class="label">${userInfo.primary_email}</span></a></li>
+						</ul>
 					</#if>
-					<ul class="nav nav-tabs nav-stacked">
-						<li><a>First Name</a></a></li>
-						<li><a>Last Name</a></li>
-						<li><a>Nick Name</a></li>
-						<li><a>Primary Email</a></li>
-					</ul>
                 </p>
             </div>
 

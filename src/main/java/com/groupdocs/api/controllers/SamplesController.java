@@ -25,10 +25,10 @@ public class SamplesController extends AbstractController {
         String appSid = System.getenv("GROUPDOCS_TEST_APPSID");
         UserInfo userInfo = null;
         ApiInvoker.getInstance().setRequestSigner(
-                new GroupDocsRequestSigner(appKey));
+                new GroupDocsRequestSigner(appSid));
         MgmtApi api = new MgmtApi();
         try {
-            UserInfoResponse response = api.GetUserProfile(appSid);
+            UserInfoResponse response = api.GetUserProfile(appKey);
             if(response != null && response.getStatus().trim().equalsIgnoreCase("Ok")){
                 userInfo = response.getResult().getUser();
             }
