@@ -1,9 +1,12 @@
 package com.groupdocs.api.controllers;
 
-import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +17,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.groupdocs.api.forms.Sample3Form;
+import com.groupdocs.api.forms.Sample4Form;
 import com.groupdocs.sdk.api.MgmtApi;
 import com.groupdocs.sdk.api.StorageApi;
 import com.groupdocs.sdk.common.ApiException;
@@ -45,19 +49,25 @@ public class SamplesController extends AbstractController {
         MgmtApi api = new MgmtApi();
         try {
             UserInfoResponse response = api.GetUserProfile(clientId);
-            if(response != null && response.getStatus().trim().equalsIgnoreCase("Ok")){
+            if (response != null
+                    && response.getStatus().trim().equalsIgnoreCase("Ok")) {
                 userInfo = response.getResult().getUser();
             }
             else {
                 throw new ApiException(0, response.getError_message());
             }
             modelAndView.addObject("userInfo", userInfo);
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
             log.error(e.getMessage());
-            if(e.getCode() == 401){
-                modelAndView.addObject("errmsg", "Wrong Credentials. Please make sure to use credentials from Production Server");
-            } else {
-                modelAndView.addObject("errmsg", "Failed to access API: " + e.getMessage());
+            if (e.getCode() == 401) {
+                modelAndView
+                        .addObject("errmsg",
+                                "Wrong Credentials. Please make sure to use credentials from Production Server");
+            }
+            else {
+                modelAndView.addObject("errmsg",
+                        "Failed to access API: " + e.getMessage());
             }
         }
         return modelAndView;
@@ -77,19 +87,26 @@ public class SamplesController extends AbstractController {
             ApiInvoker.getInstance().setRequestSigner(
                     new GroupDocsRequestSigner(privateKey));
             StorageApi api = new StorageApi();
-            ListEntitiesResponse response = api.ListEntities(clientId, "", null, null, null, null, null, null, null);
-            if(response != null && response.getStatus().trim().equalsIgnoreCase("Ok")){
+            ListEntitiesResponse response = api.ListEntities(clientId, "",
+                    null, null, null, null, null, null, null);
+            if (response != null
+                    && response.getStatus().trim().equalsIgnoreCase("Ok")) {
                 files = response.getResult().getFiles();
             }
             else {
                 throw new ApiException(0, response.getError_message());
             }
             modelAndView.addObject("files", files);
-        } catch (ApiException e) {
-            if(e.getCode() == 401){
-                modelAndView.addObject("errmsg", "Wrong Credentials. Please make sure to use credentials from Production Server");
-            } else {
-                modelAndView.addObject("errmsg", "Failed to access API: " + e.getMessage());
+        }
+        catch (ApiException e) {
+            if (e.getCode() == 401) {
+                modelAndView
+                        .addObject("errmsg",
+                                "Wrong Credentials. Please make sure to use credentials from Production Server");
+            }
+            else {
+                modelAndView.addObject("errmsg",
+                        "Failed to access API: " + e.getMessage());
             }
         }
 
@@ -113,13 +130,12 @@ public class SamplesController extends AbstractController {
         String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
         String privateKey = System.getenv("GROUPDOCS_TEST_APPSID");
 
-        if (result.hasErrors())
-        {
-          for(ObjectError error : result.getAllErrors())
-          {
-              log.error("Error: " + error.getCode() +  " - " + error.getDefaultMessage());
-              modelAndView.addObject("errmsg", error.getDefaultMessage());
-          }
+        if (result.hasErrors()) {
+            for (ObjectError error : result.getAllErrors()) {
+                log.error("Error: " + error.getCode() + " - "
+                        + error.getDefaultMessage());
+                modelAndView.addObject("errmsg", error.getDefaultMessage());
+            }
         }
         else {
             CommonsMultipartFile multipartFile = sample3Form.getFileData();
@@ -128,31 +144,47 @@ public class SamplesController extends AbstractController {
                 ApiInvoker.getInstance().setRequestSigner(
                         new GroupDocsRequestSigner(privateKey));
                 StorageApi api = new StorageApi();
-                UploadResponse response = api.Upload(clientId, multipartFile.getOriginalFilename(), null, new FileStream(multipartFile.getInputStream()));
-                if(response != null && response.getStatus().trim().equalsIgnoreCase("Ok")){
+                UploadResponse response = api.Upload(clientId,
+                        multipartFile.getOriginalFilename(), null,
+                        new FileStream(multipartFile.getInputStream()));
+                if (response != null
+                        && response.getStatus().trim().equalsIgnoreCase("Ok")) {
                     file = response.getResult();
                 }
                 else {
                     throw new ApiException(0, response.getError_message());
                 }
                 modelAndView.addObject("file", file);
-            } catch (ApiException e) {
-                if(e.getCode() == 401){
-                    modelAndView.addObject("errmsg", "Wrong Credentials. Please make sure to use credentials from Production Server");
-                } else {
-                    modelAndView.addObject("errmsg", "Failed to access API: " + e.getMessage());
+            }
+            catch (ApiException e) {
+                if (e.getCode() == 401) {
+                    modelAndView
+                            .addObject("errmsg",
+                                    "Wrong Credentials. Please make sure to use credentials from Production Server");
+                }
+                else {
+                    modelAndView.addObject("errmsg", "Failed to access API: "
+                            + e.getMessage());
                 }
             }
             catch (IOException e) {
-                modelAndView.addObject("errmsg", "Failed to access API: " + e.getMessage());
+                modelAndView.addObject("errmsg",
+                        "Failed to access API: " + e.getMessage());
             }
         }
         log.info("/sample3.htm ");
         return modelAndView;
     }
 
-    @RequestMapping("/sample4")
+    @RequestMapping(value = "/sample4", method = RequestMethod.GET)
     public ModelAndView sample4() {
+        ModelAndView modelAndView = new ModelAndView("home/sample4");
+        log.info("/sample4.htm ");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/sample4", method = RequestMethod.POST)
+    public void sample4(Sample4Form sample4Form, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView("home/sample4");
         // Specify GroupDocs URL
         @SuppressWarnings("unused")
@@ -160,9 +192,53 @@ public class SamplesController extends AbstractController {
         // Specify App Key and App SID
         String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
         String privateKey = System.getenv("GROUPDOCS_TEST_APPSID");
+        String fileGuid = sample4Form.getFileId();
+        if (fileGuid != null && !"".equalsIgnoreCase(fileGuid)) {
+            FileStream file = null;
 
-        log.info("/sample4.htm ");
-        return modelAndView;
+            try {
+                ApiInvoker.getInstance().setRequestSigner(
+                        new GroupDocsRequestSigner(privateKey));
+                StorageApi api = new StorageApi();
+                FileStream resp = api.GetFile(clientId, fileGuid);
+                if (resp != null && resp.getInputStream() != null) {
+                    file = resp;
+                }
+                else {
+                    throw new Exception("Not Found");
+                }
+                if (file.getFileName() == null) {
+                    file.setFileName(fileGuid);
+                }
+                response.setContentType(file.getContentType());
+                response.addHeader("Content-Disposition",
+                        "attachment; filename=\"" + file.getFileName() + "\"");
+                IOUtils.copy(file.getInputStream(), response.getOutputStream());
+                response.flushBuffer();
+            }
+            catch (ApiException e) {
+                if (e.getCode() == 401) {
+                    modelAndView
+                            .addObject("errmsg",
+                                    "Wrong Credentials. Please make sure to use credentials from Production Server");
+                }
+                else {
+                    modelAndView.addObject("errmsg", "Failed to access API: "
+                            + e.getMessage());
+                }
+                log.error(e.getMessage());
+            }
+            catch (Exception e) {
+                modelAndView.addObject("errmsg",
+                        "Something wrong with your file: " + e.getMessage());
+                log.error(e.getMessage());
+            }
+            finally {
+                if (file != null) {
+                    IOUtils.closeQuietly(file.getInputStream());
+                }
+            }
+        }
     }
 
     @RequestMapping("/sample5")
