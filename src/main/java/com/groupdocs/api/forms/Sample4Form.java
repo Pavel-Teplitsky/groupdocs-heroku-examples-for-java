@@ -1,7 +1,7 @@
 package com.groupdocs.api.forms;
 
 public class Sample4Form {
-    String fileId;
+    protected String fileId;
 
     public String getFileId() {
         return fileId;

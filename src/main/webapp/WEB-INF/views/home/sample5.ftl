@@ -34,67 +34,77 @@
 					</#if>
 					<form action="/sample5" method="POST" enctype="multipart/form-data">
 						<div class="input-append">
-							<label for="fileId">File ID</label>
-							<input type="text" name="fileId" id="fileId" /><br />
+							<label for="srcPathId">Source Path </label>
+							<input type="text" name="srcPath" id="srcPathId" placeholder="myDoc.doc" /><br />
 
-							<label for="folderNameId">Folder in which you want to copy/move file </label>
-							<input type="text" name="folderName" id="folderNameId" /><br />
+							<label for="dstPathId">Destination Path </label>
+							<input type="text" name="dstPath" id="dstPathId" placeholder="test/newDoc.doc" /><br /><br />
+
+							<label for="copyId">
+								<input type="radio" name="action" value="copy" id="copyId" checked /> Copy
+							</label>
+
+							<label for="moveId">
+								<input type="radio" name="action" value="move" id="moveId" /> Move
+							</label>
 							
 							<input type="submit" value="Submit" class="btn" />
 						</div>
 					</form>
-					<ul class="nav nav-tabs nav-stacked">
-						<li><a>
-							<ul class="thumbnails">
-								<li class="span5">
-									Source File
-								</li>
-								<li class="span5">
-									Destination File
-								</li>
-							</ul>
-						</a></li>
-						<li><a>
-							<ul class="thumbnails">
-								<li class="span5">
-									Name: 123
-								</li>
-								<li class="span5">
-									Name: 123
-								</li>
-							</ul>
-						</a></li>
-						<li><a>
-							<ul class="thumbnails">
-								<li class="span5">
-									Path: 234
-								</li>
-								<li class="span5">
-									Path: 234
-								</li>
-							</ul>
-						</a></li>
-						<li><a>
-							<ul class="thumbnails">
-								<li class="span5">
-									GUID: 345
-								</li>
-								<li class="span5">
-									GUID: 345
-								</li>
-							</ul>
-						</a></li>
-						<li><a>
-							<ul class="thumbnails">
-								<li class="span5">
-									ID: 456
-								</li>
-								<li class="span5">
-									ID: 456
-								</li>
-							</ul>
-						</a></li>
-					</ul>
+					<#if moveResult?? >
+						<ul class="nav nav-tabs nav-stacked">
+							<li><a>
+								<ul class="thumbnails">
+									<li class="span5">
+										Source File
+									</li>
+									<li class="span5">
+										Destination File
+									</li>
+								</ul>
+							</a></li>
+							<li><a>
+								<ul class="thumbnails">
+									<li class="span5">
+										<span class="label">Name:</span> ${moveResult.src_file.name}
+									</li>
+									<li class="span5">
+										<span class="label">Name:</span> ${moveResult.dst_file.name}
+									</li>
+								</ul>
+							</a></li>
+							<li><a>
+								<ul class="thumbnails">
+									<li class="span5">
+										<span class="label">Path:</span> ${moveResult.src_file.document_path}
+									</li>
+									<li class="span5">
+										<span class="label">Path:</span> ${moveResult.dst_file.document_path}
+									</li>
+								</ul>
+							</a></li>
+							<li><a>
+								<ul class="thumbnails">
+									<li class="span5">
+										<span class="label">GUID:</span> ${moveResult.src_file.guid}
+									</li>
+									<li class="span5">
+										<span class="label">GUID:</span> ${moveResult.dst_file.guid}
+									</li>
+								</ul>
+							</a></li>
+							<li><a>
+								<ul class="thumbnails">
+									<li class="span5">
+										<span class="label">ID:</span> ${moveResult.src_file.id}
+									</li>
+									<li class="span5">
+										<span class="label">ID:</span> ${moveResult.dst_file.id}
+									</li>
+								</ul>
+							</a></li>
+						</ul>
+					</#if>
                 </p>
             </div>
 

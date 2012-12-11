@@ -1,6 +1,5 @@
 package com.groupdocs.api.controllers;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -18,13 +17,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.groupdocs.api.forms.Sample3Form;
 import com.groupdocs.api.forms.Sample4Form;
+import com.groupdocs.api.forms.Sample5Form;
+import com.groupdocs.api.forms.Sample8Form;
+import com.groupdocs.sdk.api.DocApi;
 import com.groupdocs.sdk.api.MgmtApi;
 import com.groupdocs.sdk.api.StorageApi;
 import com.groupdocs.sdk.common.ApiException;
 import com.groupdocs.sdk.common.ApiInvoker;
 import com.groupdocs.sdk.common.FileStream;
 import com.groupdocs.sdk.common.GroupDocsRequestSigner;
+import com.groupdocs.sdk.model.FileMoveResponse;
+import com.groupdocs.sdk.model.FileMoveResult;
 import com.groupdocs.sdk.model.FileSystemDocument;
+import com.groupdocs.sdk.model.GetDocumentInfoResponse;
 import com.groupdocs.sdk.model.ListEntitiesResponse;
 import com.groupdocs.sdk.model.UploadRequestResult;
 import com.groupdocs.sdk.model.UploadResponse;
@@ -177,8 +182,9 @@ public class SamplesController extends AbstractController {
     }
 
     @RequestMapping(value = "/sample4", method = RequestMethod.GET)
-    public ModelAndView sample4() {
+    public ModelAndView sample4(Model model) {
         ModelAndView modelAndView = new ModelAndView("home/sample4");
+        model.addAttribute(new Sample4Form());
         log.info("/sample4.htm ");
         return modelAndView;
     }
@@ -241,8 +247,14 @@ public class SamplesController extends AbstractController {
         }
     }
 
-    @RequestMapping("/sample5")
-    public ModelAndView sample5() {
+    @RequestMapping(value = "/sample5", method = RequestMethod.GET)
+    public String sample5() {
+        log.info("/sample5.htm ");
+        return "home/sample5";
+    }
+
+    @RequestMapping(value = "/sample5", method = RequestMethod.POST)
+    public ModelAndView sample5(Sample5Form sample5Form) {
         ModelAndView modelAndView = new ModelAndView("home/sample5");
         // Specify GroupDocs URL
         @SuppressWarnings("unused")
@@ -250,16 +262,83 @@ public class SamplesController extends AbstractController {
         // Specify App Key and App SID
         String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
         String privateKey = System.getenv("GROUPDOCS_TEST_APPSID");
+        if (sample5Form != null && sample5Form.getAction() != null) {
+            String srcPath = sample5Form.getSrcPath();
+            String dstPath = sample5Form.getDstPath();
+            boolean isCopy = ("COPY".equalsIgnoreCase(sample5Form.getAction()) ? true
+                    : false);
+            FileMoveResult moveResult = null;
 
-        log.info("/sample5.htm ");
+            try {
+
+                ApiInvoker.getInstance().setRequestSigner(
+                        new GroupDocsRequestSigner(privateKey));
+
+                GetDocumentInfoResponse metadata = new DocApi()
+                        .GetDocumentMetadataByPath(clientId, srcPath);
+                Long fileId = null;
+                if (metadata != null
+                        && metadata.getStatus().trim().equalsIgnoreCase("Ok")) {
+                    fileId = metadata.getResult().getId().longValue();
+                }
+                else {
+                    throw new Exception("Not Found");
+                }
+
+                StorageApi api = new StorageApi();
+                FileMoveResponse response;
+                if (isCopy) {
+                    response = api.MoveFile(clientId, dstPath, null,
+                            fileId.toString(), null);
+                }
+                else {
+                    response = api.MoveFile(clientId, dstPath, null, null,
+                            fileId.toString());
+                }
+                if (response != null
+                        && response.getStatus().trim().equalsIgnoreCase("Ok")) {
+                    moveResult = response.getResult();
+                }
+                else {
+                    throw new ApiException(0, response.getError_message());
+                }
+                modelAndView.addObject("moveResult", moveResult.getDst_file());
+            }
+            catch (ApiException e) {
+                if (e.getCode() == 401) {
+                    modelAndView
+                            .addObject("errmsg",
+                                    "Wrong Credentials. Please make sure to use credentials from Production Server");
+                }
+                else {
+                    modelAndView.addObject("errmsg", "Failed to access API: "
+                            + e.getMessage());
+                }
+                log.error(e.getMessage());
+            }
+            catch (Exception e) {
+                if (dstPath == null) {
+                    modelAndView.addObject("errmsg", "This field is required: "
+                            + e.getMessage());
+                }
+                else {
+                    modelAndView
+                            .addObject(
+                                    "errmsg",
+                                    "Something wrong with your file: "
+                                            + e.getMessage());
+                }
+                log.error(e.getMessage());
+            }
+        }
         return modelAndView;
     }
 
+    @SuppressWarnings("unused")
     @RequestMapping("/sample6")
     public ModelAndView sample6() {
         ModelAndView modelAndView = new ModelAndView("home/sample6");
         // Specify GroupDocs URL
-        @SuppressWarnings("unused")
         String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
         // Specify App Key and App SID
         String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
@@ -279,29 +358,75 @@ public class SamplesController extends AbstractController {
         String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
         String privateKey = System.getenv("GROUPDOCS_TEST_APPSID");
 
+        ApiInvoker.getInstance().setRequestSigner(
+                new GroupDocsRequestSigner(privateKey));
+        StorageApi storageApi = new StorageApi();
+        ListEntitiesResponse listEntitiesResponse = null;
+
+        try {
+            listEntitiesResponse = storageApi.ListEntities(clientId, "", 0,
+                    null, null, null, null, null, true);
+            if (listEntitiesResponse != null
+                    && listEntitiesResponse.getResult() != null
+                    && listEntitiesResponse.getResult().getFiles() != null) {
+                List<FileSystemDocument> documents = listEntitiesResponse
+                        .getResult().getFiles();
+                modelAndView.addObject("documents", documents);
+            }
+            else {
+                throw new Exception("Result error!");
+            }
+        }
+        catch (ApiException e) {
+            if (e.getCode() == 401) {
+                modelAndView
+                        .addObject("errmsg",
+                                "Wrong Credentials. Please make sure to use credentials from Production Server");
+            }
+            else {
+                modelAndView.addObject("errmsg",
+                        "Failed to access API: " + e.getMessage());
+            }
+            log.error(e.getMessage());
+        }
+        catch (Exception e) {
+            modelAndView.addObject("errmsg", e.getMessage());
+            log.error(e.getMessage());
+        }
+
         log.info("/sample7.htm ");
         return modelAndView;
     }
 
-    @RequestMapping("/sample8")
-    public ModelAndView sample8() {
+    @RequestMapping(value = "/sample8", method = RequestMethod.GET)
+    public String sample8() {
+        return "home/sample8";
+    }
+
+    @SuppressWarnings("unused")
+    @RequestMapping(value = "/sample8", method = RequestMethod.POST)
+    public ModelAndView sample8(Sample8Form sample8Form) {
         ModelAndView modelAndView = new ModelAndView("home/sample8");
         // Specify GroupDocs URL
-        @SuppressWarnings("unused")
         String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
         // Specify App Key and App SID
         String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
         String privateKey = System.getenv("GROUPDOCS_TEST_APPSID");
+        if (sample8Form != null && sample8Form.getFileId() != null) {
+            String fileGuid = sample8Form.getFileId();
+            String pageNumber = sample8Form.getPageNumber();
+
+        }
 
         log.info("/sample8.htm ");
         return modelAndView;
     }
 
+    @SuppressWarnings("unused")
     @RequestMapping("/sample9")
     public ModelAndView sample9() {
         ModelAndView modelAndView = new ModelAndView("home/sample9");
         // Specify GroupDocs URL
-        @SuppressWarnings("unused")
         String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
         // Specify App Key and App SID
         String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");
@@ -311,11 +436,11 @@ public class SamplesController extends AbstractController {
         return modelAndView;
     }
 
+    @SuppressWarnings("unused")
     @RequestMapping("/sample10")
     public ModelAndView sample10() {
         ModelAndView modelAndView = new ModelAndView("home/sample10");
         // Specify GroupDocs URL
-        @SuppressWarnings("unused")
         String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
         // Specify App Key and App SID
         String clientId = System.getenv("GROUPDOCS_TEST_APPKEY");

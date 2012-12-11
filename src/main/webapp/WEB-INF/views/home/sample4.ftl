@@ -40,14 +40,6 @@
 							<input type="submit" value="Submit" class="btn" />
 						</div>
 					</form>
-					<ul class="nav nav-tabs nav-stacked">
-						<li><a>
-							File Name: 111
-						</a></li>
-						<li><a>
-							File Guid: 222
-						</a></li>
-					</ul>
                 </p>
 				  
             </div>
