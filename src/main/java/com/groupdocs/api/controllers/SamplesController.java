@@ -438,6 +438,48 @@ public class SamplesController extends AbstractController {
         if (sample8Form != null && sample8Form.getFileId() != null) {
             String fileGuid = sample8Form.getFileId();
             String pageNumber = sample8Form.getPageNumber();
+            String dimension = sample8Form.getDimension();
+            List<String> thumbnailUrls = null;
+
+
+            try {
+                if(fileGuid == null || dimension == null || pageNumber == null){
+                    throw new Exception("Please, fill all fields.");
+                }
+            
+                ApiInvoker.getInstance().setRequestSigner(
+                        new GroupDocsRequestSigner(privateKey));
+                
+                DocApi api = new DocApi();
+                GetDocumentInfoResponse response = api.GetDocumentMetadata(clientId, fileGuid);
+                Integer pageCount = null;
+                if(response != null && response.getStatus().trim().equalsIgnoreCase("Ok")){
+                    pageCount = response.getResult().getPage_count();
+                } else {
+                    throw new Exception("Not Found");
+                }
+                thumbnailUrls = api.GetDocumentPagesImageUrls(clientId, fileGuid, 0, pageCount, dimension, null, null, null).getResult().getUrl();
+                modelAndView.addObject("thumbnailUrls", thumbnailUrls);
+            }
+            catch (ApiException e) {
+                if (e.getCode() == 401) {
+                    modelAndView
+                            .addObject("errmsg",
+                                    "Wrong Credentials. Please make sure to use credentials from Production Server");
+                }
+                else {
+                    modelAndView.addObject("errmsg",
+                            "Failed to access API: " + e.getMessage());
+                }
+                log.error(e.getMessage());
+            }
+            catch (Exception e) {
+                modelAndView.addObject("errmsg", e.getMessage());
+                log.error(e.getMessage());
+            }
+
+
+
 
         }
 
