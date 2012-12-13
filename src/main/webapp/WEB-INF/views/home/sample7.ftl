@@ -33,12 +33,12 @@
 						</p>
 					</#if>
 					<ul class="nav nav-tabs nav-stacked">
-						<li><a>
-							File Name: 111
-						</a></li>
-						<li><a>
-							File Guid: 222
-						</a></li>
+						<#assign keys=documents?keys >
+						<#list keys as key >
+							<li><a>
+								<img src="img/${documents[key]}" width="50" alt="Thumbnail" /> ${key}<br />
+							</a></li>
+						</#list>
 					</ul>
                 </p>
 				  

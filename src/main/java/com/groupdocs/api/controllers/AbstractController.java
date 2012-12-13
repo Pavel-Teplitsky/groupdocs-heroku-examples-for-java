@@ -6,6 +6,6 @@ public abstract class AbstractController {
 
     protected Logger log = Logger.getLogger(this.getClass().getName());
 
-//    @Value("#{wiringProperties['sample.key']}")
-//    protected String sampleKey;
+    // @Value("#{wiringProperties['sample.key']}")
+    // protected String sampleKey;
 }

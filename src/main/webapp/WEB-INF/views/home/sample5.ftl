@@ -51,7 +51,7 @@
 							<input type="submit" value="Submit" class="btn" />
 						</div>
 					</form>
-					<#if moveResult?? >
+					<#if moveResult??  && (moveResult.src_file?? || moveResult.dst_file??)>
 						<ul class="nav nav-tabs nav-stacked">
 							<li><a>
 								<ul class="thumbnails">
@@ -66,44 +66,64 @@
 							<li><a>
 								<ul class="thumbnails">
 									<li class="span5">
-										<span class="label">Name:</span> ${moveResult.src_file.name}
+										<#if moveResult.src_file?? >
+											<span class="label">Name:</span> ${moveResult.src_file.name}
+										</#if>
 									</li>
 									<li class="span5">
-										<span class="label">Name:</span> ${moveResult.dst_file.name}
-									</li>
-								</ul>
-							</a></li>
-							<li><a>
-								<ul class="thumbnails">
-									<li class="span5">
-										<span class="label">Path:</span> ${moveResult.src_file.document_path}
-									</li>
-									<li class="span5">
-										<span class="label">Path:</span> ${moveResult.dst_file.document_path}
+										<#if moveResult.dst_file?? >
+											<span class="label">Name:</span> ${moveResult.dst_file.name}
+										</#if>
 									</li>
 								</ul>
 							</a></li>
 							<li><a>
 								<ul class="thumbnails">
 									<li class="span5">
-										<span class="label">GUID:</span> ${moveResult.src_file.guid}
+										<#if moveResult.src_file?? >
+											<span class="label">Path:</span> ${moveResult.src_file.document_path}
+										</#if>
 									</li>
 									<li class="span5">
-										<span class="label">GUID:</span> ${moveResult.dst_file.guid}
+										<#if moveResult.dst_file?? >
+											<span class="label">Path:</span> ${moveResult.dst_file.document_path}
+										</#if>
 									</li>
 								</ul>
 							</a></li>
 							<li><a>
 								<ul class="thumbnails">
 									<li class="span5">
-										<span class="label">ID:</span> ${moveResult.src_file.id}
+										<#if moveResult.src_file?? >
+											<span class="label">GUID:</span> ${moveResult.src_file.guid}
+										</#if>
 									</li>
 									<li class="span5">
-										<span class="label">ID:</span> ${moveResult.dst_file.id}
+										<#if moveResult.dst_file?? >
+											<span class="label">GUID:</span> ${moveResult.dst_file.guid}
+										</#if>
+									</li>
+								</ul>
+							</a></li>
+							<li><a>
+								<ul class="thumbnails">
+									<li class="span5">
+										<#if moveResult.src_file?? >
+											<span class="label">ID:</span> ${moveResult.src_file.id}
+										</#if>
+									</li>
+									<li class="span5">
+										<#if moveResult.dst_file?? >
+											<span class="label">ID:</span> ${moveResult.dst_file.id}
+										</#if>
 									</li>
 								</ul>
 							</a></li>
 						</ul>
+					<#elseif moveResult?? >
+						<div class="alert alert-success">
+							Operation complete.
+						</div>
 					</#if>
                 </p>
             </div>

@@ -124,4 +124,5 @@
 	</build>
 	<dependencyManagement>
 	</dependencyManagement>
+	<packaging>war</packaging>
 </project>
