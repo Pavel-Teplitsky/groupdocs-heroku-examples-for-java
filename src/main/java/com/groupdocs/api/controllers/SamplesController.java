@@ -25,6 +25,7 @@ import com.groupdocs.api.forms.Sample3Form;
 import com.groupdocs.api.forms.Sample4Form;
 import com.groupdocs.api.forms.Sample5Form;
 import com.groupdocs.api.forms.Sample8Form;
+import com.groupdocs.api.forms.Sample9Form;
 import com.groupdocs.sdk.api.DocApi;
 import com.groupdocs.sdk.api.MgmtApi;
 import com.groupdocs.sdk.api.StorageApi;
@@ -36,6 +37,7 @@ import com.groupdocs.sdk.model.FileMoveResponse;
 import com.groupdocs.sdk.model.FileMoveResult;
 import com.groupdocs.sdk.model.FileSystemDocument;
 import com.groupdocs.sdk.model.GetDocumentInfoResponse;
+import com.groupdocs.sdk.model.GetDocumentInfoResult;
 import com.groupdocs.sdk.model.ListEntitiesResponse;
 import com.groupdocs.sdk.model.UploadRequestResult;
 import com.groupdocs.sdk.model.UploadResponse;
@@ -378,7 +380,9 @@ public class SamplesController extends AbstractController {
                     && listEntitiesResponse.getResult().getFiles() != null) {
                 List<FileSystemDocument> documents = listEntitiesResponse
                         .getResult().getFiles();
-                File appPathFile = new File(request.getSession().getServletContext().getRealPath("/") + "/public-resources/img/");
+                File appPathFile = new File(request.getSession()
+                        .getServletContext().getRealPath("/")
+                        + "/public-resources/img/");
                 FileUtils.deleteDirectory(appPathFile);
                 appPathFile.mkdirs();
                 Map<String, String> files = new HashMap<String, String>();
@@ -386,9 +390,12 @@ public class SamplesController extends AbstractController {
                     FileSystemDocument document = documents.get(index);
                     String base64 = document.getThumbnail();
                     if (base64 != null) {
-                        String thumbName = "thumbnail" + Integer.toString(index) + ".png";
-                        String thumbPath = appPathFile.getAbsolutePath() + "/" + thumbName;
-                        FileOutputStream fileOutputStream = new FileOutputStream(thumbPath);
+                        String thumbName = "thumbnail"
+                                + Integer.toString(index) + ".png";
+                        String thumbPath = appPathFile.getAbsolutePath() + "/"
+                                + thumbName;
+                        FileOutputStream fileOutputStream = new FileOutputStream(
+                                thumbPath);
                         fileOutputStream.write(Base64.decode(base64));
                         fileOutputStream.close();
                         files.put(document.getName(), thumbName);
@@ -440,25 +447,29 @@ public class SamplesController extends AbstractController {
             String pageNumber = sample8Form.getPageNumber();
             String dimension = sample8Form.getDimension();
             List<String> thumbnailUrls = null;
-
-
             try {
-                if(fileGuid == null || dimension == null || pageNumber == null){
+                if (fileGuid == null || dimension == null || pageNumber == null) {
                     throw new Exception("Please, fill all fields.");
                 }
-            
+
                 ApiInvoker.getInstance().setRequestSigner(
                         new GroupDocsRequestSigner(privateKey));
-                
+
                 DocApi api = new DocApi();
-                GetDocumentInfoResponse response = api.GetDocumentMetadata(clientId, fileGuid);
+                GetDocumentInfoResponse response = api.GetDocumentMetadata(
+                        clientId, fileGuid);
                 Integer pageCount = null;
-                if(response != null && response.getStatus().trim().equalsIgnoreCase("Ok")){
+                if (response != null
+                        && response.getStatus().trim().equalsIgnoreCase("Ok")) {
                     pageCount = response.getResult().getPage_count();
-                } else {
+                }
+                else {
                     throw new Exception("Not Found");
                 }
-                thumbnailUrls = api.GetDocumentPagesImageUrls(clientId, fileGuid, 0, pageCount, dimension, null, null, null).getResult().getUrl();
+                thumbnailUrls = api
+                        .GetDocumentPagesImageUrls(clientId, fileGuid, 0,
+                                pageCount, dimension, null, null, null)
+                        .getResult().getUrl();
                 modelAndView.addObject("thumbnailUrls", thumbnailUrls);
             }
             catch (ApiException e) {
@@ -468,8 +479,8 @@ public class SamplesController extends AbstractController {
                                     "Wrong Credentials. Please make sure to use credentials from Production Server");
                 }
                 else {
-                    modelAndView.addObject("errmsg",
-                            "Failed to access API: " + e.getMessage());
+                    modelAndView.addObject("errmsg", "Failed to access API: "
+                            + e.getMessage());
                 }
                 log.error(e.getMessage());
             }
@@ -477,26 +488,72 @@ public class SamplesController extends AbstractController {
                 modelAndView.addObject("errmsg", e.getMessage());
                 log.error(e.getMessage());
             }
-
-
-
-
         }
 
         log.info("/sample8.htm ");
         return modelAndView;
     }
 
+    @RequestMapping(value = "/sample9", method = RequestMethod.GET)
+    public String sample9() {
+        return "home/sample9";
+    }
+
     @SuppressWarnings("unused")
-    @RequestMapping("/sample9")
-    public ModelAndView sample9() {
+    @RequestMapping(value = "/sample9", method = RequestMethod.POST)
+    public ModelAndView sample9(Sample9Form sample9Form) {
         ModelAndView modelAndView = new ModelAndView("home/sample9");
         // Specify GroupDocs URL
         String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
         // Specify App Key and App SID
         String clientId = System.getenv("GROUPDOCS_TEST_CID");
         String privateKey = System.getenv("GROUPDOCS_TEST_PKEY");
+        String fileId = sample9Form.getFileId();
+        String width = sample9Form.getWidth();
+        String height = sample9Form.getHeight();
+        HashMap<String, String> data = null;
+        try {
+            if (fileId == null || width == null || height == null) {
+                throw new Exception();
+            }
 
+            ApiInvoker.getInstance().setRequestSigner(
+                    new GroupDocsRequestSigner(privateKey));
+            DocApi api = new DocApi();
+            GetDocumentInfoResponse response = api.GetDocumentMetadata(
+                    clientId, fileId);
+            if (response != null
+                    && response.getStatus().trim().equalsIgnoreCase("Ok")) {
+                GetDocumentInfoResult result = response.getResult();
+                data = new HashMap<String, String>();
+                data.put("fileId", fileId);
+                data.put("id", result.getId().toString());
+                data.put("width", width);
+                data.put("height", height);
+                data.put("pages", result.getPage_count().toString());
+                data.put("views", result.getViews_count().toString() + " times");
+            }
+            else {
+                throw new Exception("Not Found");
+            }
+            modelAndView.addObject("data", data);
+        }
+        catch (ApiException e) {
+            if (e.getCode() == 401) {
+                modelAndView
+                        .addObject("errmsg",
+                                "Wrong Credentials. Please make sure to use credentials from Production Server");
+            }
+            else {
+                modelAndView.addObject("errmsg",
+                        "Failed to access API: " + e.getMessage());
+            }
+            log.error(e.getMessage());
+        }
+        catch (Exception e) {
+            modelAndView.addObject("errmsg", e.getMessage());
+            log.error(e.getMessage());
+        }
         log.info("/sample9.htm ");
         return modelAndView;
     }
