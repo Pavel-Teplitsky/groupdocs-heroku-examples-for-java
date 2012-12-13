@@ -44,10 +44,11 @@
 							<input type="submit" value="Submit" class="btn" />
 						</div>
 					</form>
-
-					<p>
-						<iframe src="https://apps.groupdocs.com/document-viewer/embed/@fileGuid" frameborder="0" width="100%" height="1000px" />
-					</p>
+					<#if fileId?? >
+						<p>
+							<iframe src="https://apps.groupdocs.com/document-viewer/embed/${fileId}" frameborder="0" width="100%" height="1000px" />
+						</p>
+					</#if>
                 </p>
 				  
             </div>

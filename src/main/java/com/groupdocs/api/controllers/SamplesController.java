@@ -3,6 +3,7 @@ package com.groupdocs.api.controllers;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.groupdocs.api.forms.Sample10Form;
@@ -30,6 +34,7 @@ import com.groupdocs.api.forms.Sample8Form;
 import com.groupdocs.api.forms.Sample9Form;
 import com.groupdocs.sdk.api.DocApi;
 import com.groupdocs.sdk.api.MgmtApi;
+import com.groupdocs.sdk.api.SignatureApi;
 import com.groupdocs.sdk.api.StorageApi;
 import com.groupdocs.sdk.common.ApiException;
 import com.groupdocs.sdk.common.ApiInvoker;
@@ -43,6 +48,10 @@ import com.groupdocs.sdk.model.GetDocumentInfoResult;
 import com.groupdocs.sdk.model.ListEntitiesResponse;
 import com.groupdocs.sdk.model.SharedUsersResponse;
 import com.groupdocs.sdk.model.SharedUsersResult;
+import com.groupdocs.sdk.model.SignatureSignDocumentDocumentSettings;
+import com.groupdocs.sdk.model.SignatureSignDocumentResponse;
+import com.groupdocs.sdk.model.SignatureSignDocumentSettings;
+import com.groupdocs.sdk.model.SignatureSignDocumentSignerSettings;
 import com.groupdocs.sdk.model.UploadRequestResult;
 import com.groupdocs.sdk.model.UploadResponse;
 import com.groupdocs.sdk.model.UserInfo;
@@ -349,13 +358,87 @@ public class SamplesController extends AbstractController {
 
     @SuppressWarnings("unused")
     @RequestMapping("/sample6")
-    public ModelAndView sample6() {
+    public ModelAndView sample6(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView("home/sample6");
         // Specify GroupDocs URL
         String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
         // Specify App Key and App SID
         String clientId = System.getenv("GROUPDOCS_TEST_CID");
         String privateKey = System.getenv("GROUPDOCS_TEST_PKEY");
+        String fileId = null;
+
+        if (ServletFileUpload.isMultipartContent(request)) {
+
+            if (!(request instanceof DefaultMultipartHttpServletRequest)) {
+                throw new IllegalArgumentException(
+                        "Request is not multipart, please 'multipart/form-data' enctype for your form.");
+            }
+
+            DefaultMultipartHttpServletRequest dmhsRequest = (DefaultMultipartHttpServletRequest) request;
+            MultipartFile document = dmhsRequest.getFile("document");
+            MultipartFile signature = dmhsRequest.getFile("signature");
+            try {
+                if (document == null || signature == null) {
+                    throw new Exception("Please, fill all fields!");
+                }
+                String base64file = ApiInvoker.readAsDataURL(
+                        document.getInputStream(), document.getContentType());
+                String base64signature = ApiInvoker.readAsDataURL(
+                        signature.getInputStream(), signature.getContentType());
+
+                ApiInvoker.getInstance().setRequestSigner(
+                        new GroupDocsRequestSigner(privateKey));
+
+                SignatureSignDocumentDocumentSettings doc = new SignatureSignDocumentDocumentSettings();
+                doc.setName(document.getName());
+                doc.setData(base64file);
+
+                SignatureSignDocumentSignerSettings signer = new SignatureSignDocumentSignerSettings();
+                signer.setPlaceSingatureOn("");
+                signer.setName(signature.getName());
+                signer.setData(base64signature);
+                signer.setHeight(40d);
+                signer.setWidth(100d);
+                signer.setTop(0.03319);
+                signer.setLeft(0.52171);
+
+                SignatureSignDocumentSettings requestBody = new SignatureSignDocumentSettings();
+                List<SignatureSignDocumentSignerSettings> signers = new ArrayList<SignatureSignDocumentSignerSettings>();
+                signers.add(signer);
+                requestBody.setSigners(signers);
+                List<SignatureSignDocumentDocumentSettings> documents = new ArrayList<SignatureSignDocumentDocumentSettings>();
+                documents.add(doc);
+                requestBody.setDocuments(documents);
+
+                SignatureSignDocumentResponse response = new SignatureApi()
+                        .SignDocument(clientId, requestBody);
+                if (response != null
+                        && response.getStatus().trim().equalsIgnoreCase("Ok")) {
+                    fileId = response.getResult().getDocumentId();
+                }
+                else {
+                    throw new ApiException(400, response.getError_message());
+                }
+                modelAndView.addObject("fileId", fileId);
+            }
+            catch (ApiException e) {
+                if (e.getCode() == 401) {
+                    modelAndView
+                            .addObject("errmsg",
+                                    "Wrong Credentials. Please make sure to use credentials from Production Server");
+                }
+                else {
+                    modelAndView.addObject("errmsg", "Failed to access API: "
+                            + e.getMessage());
+                }
+                log.error(e.getMessage());
+            }
+            catch (Exception e) {
+                modelAndView.addObject("errmsg",
+                        "Something wrong with your file: " + e.getMessage());
+                log.error(e.getMessage());
+            }
+        }
 
         log.info("/sample6.htm ");
         return modelAndView;
