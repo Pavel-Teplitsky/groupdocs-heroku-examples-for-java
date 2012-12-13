@@ -3,6 +3,7 @@ package com.groupdocs.api.controllers;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.groupdocs.api.forms.Sample10Form;
 import com.groupdocs.api.forms.Sample3Form;
 import com.groupdocs.api.forms.Sample4Form;
 import com.groupdocs.api.forms.Sample5Form;
@@ -39,6 +41,8 @@ import com.groupdocs.sdk.model.FileSystemDocument;
 import com.groupdocs.sdk.model.GetDocumentInfoResponse;
 import com.groupdocs.sdk.model.GetDocumentInfoResult;
 import com.groupdocs.sdk.model.ListEntitiesResponse;
+import com.groupdocs.sdk.model.SharedUsersResponse;
+import com.groupdocs.sdk.model.SharedUsersResult;
 import com.groupdocs.sdk.model.UploadRequestResult;
 import com.groupdocs.sdk.model.UploadResponse;
 import com.groupdocs.sdk.model.UserInfo;
@@ -558,16 +562,69 @@ public class SamplesController extends AbstractController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/sample10", method = RequestMethod.GET)
+    public String sample10() {
+        return "home/sample10";
+    }
+
     @SuppressWarnings("unused")
-    @RequestMapping("/sample10")
-    public ModelAndView sample10() {
+    @RequestMapping(value = "/sample10", method = RequestMethod.POST)
+    public ModelAndView sample10(Sample10Form sample10Form) {
         ModelAndView modelAndView = new ModelAndView("home/sample10");
         // Specify GroupDocs URL
         String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
         // Specify App Key and App SID
         String clientId = System.getenv("GROUPDOCS_TEST_CID");
         String privateKey = System.getenv("GROUPDOCS_TEST_PKEY");
+        String fileGuid = sample10Form.getFileId();
+        String email = sample10Form.getEmail();
+        SharedUsersResult result = null;
+        try {
+            if (fileGuid == null || email == null) {
+                throw new Exception();
+            }
+            ApiInvoker.getInstance().setRequestSigner(
+                    new GroupDocsRequestSigner(privateKey));
 
+            DocApi api = new DocApi();
+            GetDocumentInfoResponse metadata = new DocApi()
+                    .GetDocumentMetadata(clientId, fileGuid);
+            String fileId = null;
+            if (metadata != null
+                    && metadata.getStatus().trim().equalsIgnoreCase("Ok")) {
+                fileId = metadata.getResult().getId().toString();
+            }
+            else {
+                throw new Exception("Not Found");
+            }
+
+            SharedUsersResponse response = api.ShareDocument(clientId, fileId,
+                    Arrays.asList(new String[] { email }));
+            if (response != null
+                    && metadata.getStatus().trim().equalsIgnoreCase("Ok")) {
+                result = response.getResult();
+            }
+            else {
+                throw new Exception("User identified by " + " not Found");
+            }
+            modelAndView.addObject("result", result);
+        }
+        catch (ApiException e) {
+            if (e.getCode() == 401) {
+                modelAndView
+                        .addObject("errmsg",
+                                "Wrong Credentials. Please make sure to use credentials from Production Server");
+            }
+            else {
+                modelAndView.addObject("errmsg",
+                        "Failed to access API: " + e.getMessage());
+            }
+            log.error(e.getMessage());
+        }
+        catch (Exception e) {
+            modelAndView.addObject("errmsg", e.getMessage());
+            log.error(e.getMessage());
+        }
         log.info("/sample10.htm ");
         return modelAndView;
     }

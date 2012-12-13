@@ -43,14 +43,15 @@
 							<input type="submit" value="Submit" class="btn" />
 						</div>
 					</form>
-					<ul class="nav nav-tabs nav-stacked">
-						<li><a>
-							File Name: 111
-						</a></li>
-						<li><a>
-							File Guid: 222
-						</a></li>
-					</ul>
+					<#if result?? >
+						<#list result.shared_users as res >
+							<ul class="nav nav-tabs nav-stacked">
+								<li><a>
+									<span class="label">Shared to:</span> ${res.nickname}
+								</a></li>
+							</ul>
+						</#list>
+					</#if>
                 </p>
 				  
             </div>
