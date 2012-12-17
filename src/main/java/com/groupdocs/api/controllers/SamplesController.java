@@ -66,10 +66,10 @@ public class SamplesController extends AbstractController {
         ModelAndView modelAndView = new ModelAndView("home/sample1");
         // Specify GroupDocs URL
         @SuppressWarnings("unused")
-        String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
+        String groupdocsUrl = System.getenv("GROUPDOCS_URL");
         // Specify App Key and App SID
-        String clientId = System.getenv("GROUPDOCS_TEST_CID");
-        String privateKey = System.getenv("GROUPDOCS_TEST_PKEY");
+        String clientId = System.getenv("GROUPDOCS_CID");
+        String privateKey = System.getenv("GROUPDOCS_PKEY");
         UserInfo userInfo = null;
         ApiInvoker.getInstance().setRequestSigner(
                 new GroupDocsRequestSigner(privateKey));
@@ -105,10 +105,10 @@ public class SamplesController extends AbstractController {
         ModelAndView modelAndView = new ModelAndView("home/sample2");
         // Specify GroupDocs URL
         @SuppressWarnings("unused")
-        String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
+        String groupdocsUrl = System.getenv("GROUPDOCS_URL");
         // Specify App Key and App SID
-        String clientId = System.getenv("GROUPDOCS_TEST_CID");
-        String privateKey = System.getenv("GROUPDOCS_TEST_PKEY");
+        String clientId = System.getenv("GROUPDOCS_CID");
+        String privateKey = System.getenv("GROUPDOCS_PKEY");
         List<FileSystemDocument> files = null;
         try {
             ApiInvoker.getInstance().setRequestSigner(
@@ -152,10 +152,10 @@ public class SamplesController extends AbstractController {
         ModelAndView modelAndView = new ModelAndView("home/sample3");
         // Specify GroupDocs URL
         @SuppressWarnings("unused")
-        String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
+        String groupdocsUrl = System.getenv("GROUPDOCS_URL");
         // Specify App Key and App SID
-        String clientId = System.getenv("GROUPDOCS_TEST_CID");
-        String privateKey = System.getenv("GROUPDOCS_TEST_PKEY");
+        String clientId = System.getenv("GROUPDOCS_CID");
+        String privateKey = System.getenv("GROUPDOCS_PKEY");
 
         if (result.hasErrors()) {
             for (ObjectError error : result.getAllErrors()) {
@@ -216,10 +216,10 @@ public class SamplesController extends AbstractController {
         ModelAndView modelAndView = new ModelAndView("home/sample4");
         // Specify GroupDocs URL
         @SuppressWarnings("unused")
-        String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
+        String groupdocsUrl = System.getenv("GROUPDOCS_URL");
         // Specify App Key and App SID
-        String clientId = System.getenv("GROUPDOCS_TEST_CID");
-        String privateKey = System.getenv("GROUPDOCS_TEST_PKEY");
+        String clientId = System.getenv("GROUPDOCS_CID");
+        String privateKey = System.getenv("GROUPDOCS_PKEY");
         String fileGuid = sample4Form.getFileId();
         if (fileGuid != null && !"".equalsIgnoreCase(fileGuid)) {
             FileStream file = null;
@@ -280,10 +280,10 @@ public class SamplesController extends AbstractController {
         ModelAndView modelAndView = new ModelAndView("home/sample5");
         // Specify GroupDocs URL
         @SuppressWarnings("unused")
-        String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
+        String groupdocsUrl = System.getenv("GROUPDOCS_URL");
         // Specify App Key and App SID
-        String clientId = System.getenv("GROUPDOCS_TEST_CID");
-        String privateKey = System.getenv("GROUPDOCS_TEST_PKEY");
+        String clientId = System.getenv("GROUPDOCS_CID");
+        String privateKey = System.getenv("GROUPDOCS_PKEY");
         if (sample5Form != null && sample5Form.getAction() != null) {
             String srcPath = sample5Form.getSrcPath();
             String dstPath = sample5Form.getDstPath();
@@ -361,10 +361,10 @@ public class SamplesController extends AbstractController {
     public ModelAndView sample6(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView("home/sample6");
         // Specify GroupDocs URL
-        String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
+        String groupdocsUrl = System.getenv("GROUPDOCS_URL");
         // Specify App Key and App SID
-        String clientId = System.getenv("GROUPDOCS_TEST_CID");
-        String privateKey = System.getenv("GROUPDOCS_TEST_PKEY");
+        String clientId = System.getenv("GROUPDOCS_CID");
+        String privateKey = System.getenv("GROUPDOCS_PKEY");
         String fileId = null;
 
         if (ServletFileUpload.isMultipartContent(request)) {
@@ -449,10 +449,10 @@ public class SamplesController extends AbstractController {
         ModelAndView modelAndView = new ModelAndView("home/sample7");
         // Specify GroupDocs URL
         @SuppressWarnings("unused")
-        String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
+        String groupdocsUrl = System.getenv("GROUPDOCS_URL");
         // Specify App Key and App SID
-        String clientId = System.getenv("GROUPDOCS_TEST_CID");
-        String privateKey = System.getenv("GROUPDOCS_TEST_PKEY");
+        String clientId = System.getenv("GROUPDOCS_CID");
+        String privateKey = System.getenv("GROUPDOCS_PKEY");
 
         ApiInvoker.getInstance().setRequestSigner(
                 new GroupDocsRequestSigner(privateKey));
@@ -525,10 +525,10 @@ public class SamplesController extends AbstractController {
     public ModelAndView sample8(Sample8Form sample8Form) {
         ModelAndView modelAndView = new ModelAndView("home/sample8");
         // Specify GroupDocs URL
-        String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
+        String groupdocsUrl = System.getenv("GROUPDOCS_URL");
         // Specify App Key and App SID
-        String clientId = System.getenv("GROUPDOCS_TEST_CID");
-        String privateKey = System.getenv("GROUPDOCS_TEST_PKEY");
+        String clientId = System.getenv("GROUPDOCS_CID");
+        String privateKey = System.getenv("GROUPDOCS_PKEY");
         if (sample8Form != null && sample8Form.getFileId() != null) {
             String fileGuid = sample8Form.getFileId();
             String pageNumber = sample8Form.getPageNumber();
@@ -591,10 +591,10 @@ public class SamplesController extends AbstractController {
     public ModelAndView sample9(Sample9Form sample9Form) {
         ModelAndView modelAndView = new ModelAndView("home/sample9");
         // Specify GroupDocs URL
-        String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
+        String groupdocsUrl = System.getenv("GROUPDOCS_URL");
         // Specify App Key and App SID
-        String clientId = System.getenv("GROUPDOCS_TEST_CID");
-        String privateKey = System.getenv("GROUPDOCS_TEST_PKEY");
+        String clientId = System.getenv("GROUPDOCS_CID");
+        String privateKey = System.getenv("GROUPDOCS_PKEY");
         String fileId = sample9Form.getFileId();
         String width = sample9Form.getWidth();
         String height = sample9Form.getHeight();
@@ -655,10 +655,10 @@ public class SamplesController extends AbstractController {
     public ModelAndView sample10(Sample10Form sample10Form) {
         ModelAndView modelAndView = new ModelAndView("home/sample10");
         // Specify GroupDocs URL
-        String groupdocsUrl = System.getenv("GROUPDOCS_TEST_URL");
+        String groupdocsUrl = System.getenv("GROUPDOCS_URL");
         // Specify App Key and App SID
-        String clientId = System.getenv("GROUPDOCS_TEST_CID");
-        String privateKey = System.getenv("GROUPDOCS_TEST_PKEY");
+        String clientId = System.getenv("GROUPDOCS_CID");
+        String privateKey = System.getenv("GROUPDOCS_PKEY");
         String fileGuid = sample10Form.getFileId();
         String email = sample10Form.getEmail();
         SharedUsersResult result = null;
