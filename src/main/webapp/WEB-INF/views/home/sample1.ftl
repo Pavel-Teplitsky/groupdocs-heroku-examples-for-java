@@ -33,10 +33,10 @@
 						</p>
 					<#elseif userInfo?? >
 						<ul class="nav nav-tabs nav-stacked">
-							<li><a><span class="label">First Name:</span> ${userInfo.firstname}</a></a></li>
-							<li><a><span class="label">Last Name:</span> ${userInfo.lastname}</a></li>
-							<li><a><span class="label">Nick Name:</span> ${userInfo.nickname}</a></li>
-							<li><a><span class="label">Primary Email:</span> ${userInfo.primary_email}</a></li>
+							<li><a><span class="label">First Name:</span> ${userInfo.firstname!''}</a></a></li>
+							<li><a><span class="label">Last Name:</span> ${userInfo.lastname!''}</a></li>
+							<li><a><span class="label">Nick Name:</span> ${userInfo.nickname!''}</a></li>
+							<li><a><span class="label">Primary Email:</span> ${userInfo.primary_email!''}</a></li>
 						</ul>
 					</#if>
                 </p>
