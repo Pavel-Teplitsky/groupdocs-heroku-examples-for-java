@@ -40,7 +40,7 @@ Deploy your code:
     $ git push heroku master
 
 ## Live running app
-This sample app is also running live on Heroku. To view and try, please open [http://groupdocs-heroku-examples-for-java.herokuapp.com/](http://groupdocs-heroku-examples-for-java.herokuapp.com/).
+This sample app is also running live on Heroku. To view and try, please open [http://groupdocs-heroku-java-examples.herokuapp.com/](http://groupdocs-heroku-java-examples.herokuapp.com/).
 
 ## To deploy project locally follow this instructions:
 
